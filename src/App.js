@@ -1,5 +1,5 @@
 import { useState } from "react";
-let turn = 1;
+
 function Square({ value, onSquareClick }) {
   // const [value, setValue] = useState(null);
 
@@ -16,6 +16,8 @@ function Square({ value, onSquareClick }) {
 export default function Board() {
   const [xIsNext, setXIsNext] = useState(true);
   const [squares, setSquares] = useState(Array(9).fill(null));
+  const turnCount = squares.filter(square => square !== null).length;
+
   function handleClick(i) {
     if (squares[i] || calculateWinner(squares)) {
       return;
@@ -28,19 +30,18 @@ export default function Board() {
     }
     setSquares(nextSquares);
     setXIsNext(!xIsNext)
-    turn++;
+
   }
 
   const winner = calculateWinner(squares)
   let status;
-  if (winner) {
+  if (!winner & turnCount == 9) {
+    status = "Draw"
+  }
+  else if (winner) {
     status = "Winner:" + winner;
   } else {
-    if (turn == 10) {
-      status = "Draw"
-    } else {
-      status = "Next player: " + (xIsNext ? "X" : "O")
-    }
+    status = "Next player: " + (xIsNext ? "X" : "O")
   }
 
   return (
